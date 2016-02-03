@@ -13,14 +13,18 @@ To install:
 
 	make install
 
-(3) run ‘add shell’ and launch the script in the background
+(3) run ‘adb shell’ and launch the script in the background
+
 	adb shell
+
 	shell@angler:/ $ cd /data/local/tmp
+
 	shell@angler:/data/local/tmp $ gasGauge.sh > log &
 
 (4) Disconnect the USB debug cable and use the phone or run your tests as usual
 
 (5) To retrieve the log
+
 	make retrieve
 
 (6) To analyze the log, run it through the Mathematica notebook in the Mathematica/ subdirectory of the repository
