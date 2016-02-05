@@ -10,16 +10,43 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     28039,        655]
-NotebookOptionsPosition[     27706,        638]
-NotebookOutlinePosition[     28063,        654]
-CellTagsIndexPosition[     28020,        651]
+NotebookDataLength[     33299,        761]
+NotebookOptionsPosition[     32721,        737]
+NotebookOutlinePosition[     33079,        753]
+CellTagsIndexPosition[     33036,        750]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
+Cell[TextData[{
+ StyleBox["Basic analysis of dumps captured from Android battery",
+  FontFamily->"Lucida Bright",
+  FontSize->24,
+  FontSlant->"Italic"],
+ StyleBox["  ",
+  FontSize->24],
+ StyleBox["\[CloseCurlyDoubleQuote]uevent\[CloseCurlyDoubleQuote]",
+  FontFamily->"Menlo",
+  FontSize->24],
+ StyleBox[" ",
+  FontSize->24],
+ StyleBox["interface",
+  FontFamily->"Lucida Bright",
+  FontSize->24,
+  FontSlant->"Italic"],
+ StyleBox["\n",
+  FontSize->24],
+ "\nPhillip Stanley-Marbell\nphillip.stanleymarbell@gmail.com / psm@mit.edu\n\
+\nFebruary 2016"
+}], "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ CellChangeTimes->{{3.663676786476686*^9, 3.66367689119592*^9}, {
+  3.663676930964283*^9, 3.663676937421064*^9}, {3.663677011737933*^9, 
+  3.663677029624679*^9}},
+ Background->RGBColor[0.87, 0.94, 1]],
+
 Cell[BoxData[{
  RowBox[{
   RowBox[{
@@ -27,112 +54,157 @@ Cell[BoxData[{
     RowBox[{"NotebookDirectory", "[", "]"}], "]"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"raw", " ", "=", 
-   RowBox[{"Import", "[", 
-    RowBox[{
-    "\"\<!grep -B 15 'POWER_SUPPLY_CURRENT_NOW' \
-../Logs/2016-02-03-14-15-47.txt\>\"", ",", " ", "\"\<List\>\""}], "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"rawGrouped", " ", "=", " ", 
-   RowBox[{"Partition", "[", 
-    RowBox[{"raw", ",", " ", "17"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"datesAndCurrentsMicroamps", "=", " ", 
-   RowBox[{
+  RowBox[{
+   RowBox[{"analyze", "[", 
+    RowBox[{"deviceFamily_", ",", " ", "fileName_"}], "]"}], " ", ":=", " ", 
+   RowBox[{"Module", "[", 
     RowBox[{
      RowBox[{"{", 
       RowBox[{
-       RowBox[{"DateObject", "[", 
-        RowBox[{"#", "[", 
-         RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", " ", 
-       RowBox[{"ToExpression", "[", 
+      "grepBeforeCount", ",", " ", "groupSize", ",", " ", "currentIndex", ",",
+        "\[IndentingNewLine]", "raw", ",", " ", "rawGrouped", ",", 
+       "datesAndCurrentsMicroamps", ",", "datesAndDischargeCurrentsMicroamps",
+        ",", "datesAndDischargeCurrentsAbsoluteMicroamps"}], "}"}], ",", 
+     "\[IndentingNewLine]", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"grepBeforeCount", " ", "=", " ", 
+       RowBox[{"If", "[", 
         RowBox[{
-         RowBox[{"StringSplit", "[", 
+         RowBox[{"deviceFamily", " ", "\[Equal]", " ", "\"\<nexus6p\>\""}], 
+         ",", "\[IndentingNewLine]", "\t", "15", ",", "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", "Else", " ", "*)"}], "\[IndentingNewLine]", "\t", 
+         "11"}], "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      RowBox[{"groupSize", " ", "=", " ", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"deviceFamily", " ", "\[Equal]", " ", "\"\<nexus6p\>\""}], 
+         ",", "\[IndentingNewLine]", "\t", "17", ",", "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", "Else", " ", "*)"}], " ", "\[IndentingNewLine]", 
+         "\t", "13"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"currentIndex", " ", "=", " ", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{"deviceFamily", " ", "\[Equal]", " ", "\"\<nexus6p\>\""}], 
+         ",", "\[IndentingNewLine]", "\t", "16", ",", "\[IndentingNewLine]", 
+         RowBox[{"(*", " ", "Else", " ", "*)"}], "\[IndentingNewLine]", "\t", 
+         "12"}], "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", 
+      RowBox[{"raw", " ", "=", 
+       RowBox[{"Import", "[", 
+        RowBox[{
+         RowBox[{"\"\<!grep -B \>\"", "<>", 
+          RowBox[{"ToString", "[", "grepBeforeCount", "]"}], "<>", 
+          "\"\< 'POWER_SUPPLY_CURRENT_NOW' \>\"", "<>", "fileName"}], ",", 
+         " ", "\"\<List\>\""}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"rawGrouped", " ", "=", " ", 
+       RowBox[{"Partition", "[", 
+        RowBox[{"raw", ",", " ", "groupSize"}], "]"}]}], ";", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{"Print", "[", "rawGrouped", "]"}], ";"}], "*)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{"datesAndCurrentsMicroamps", "=", " ", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"DateObject", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], "]"}], ",", " ", 
+           RowBox[{"ToExpression", "[", 
+            RowBox[{
+             RowBox[{"StringSplit", "[", 
+              RowBox[{
+               RowBox[{"#", "[", 
+                RowBox[{"[", "currentIndex", "]"}], "]"}], ",", " ", 
+               "\"\<=\>\""}], "]"}], "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], "&"}], "/@", 
+        "rawGrouped"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"datesAndDischargeCurrentsMicroamps", " ", "=", " ", 
+       RowBox[{"Select", "[", 
+        RowBox[{"datesAndCurrentsMicroamps", ",", " ", 
+         RowBox[{
           RowBox[{
            RowBox[{"#", "[", 
-            RowBox[{"[", "16", "]"}], "]"}], ",", " ", "\"\<=\>\""}], "]"}], 
-         "[", 
-         RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], "&"}], "/@", 
-    "rawGrouped"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"datesAndDischargeCurrentsMicroamps", " ", "=", " ", 
-   RowBox[{"Select", "[", 
-    RowBox[{"datesAndCurrentsMicroamps", ",", " ", 
-     RowBox[{
-      RowBox[{
-       RowBox[{"#", "[", 
-        RowBox[{"[", "2", "]"}], "]"}], "\[LessEqual]", " ", "0"}], "&"}]}], 
-    "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"datesAndDischargeCurrentsAbsoluteMicroamps", " ", "=", " ", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"{", 
+            RowBox[{"[", "2", "]"}], "]"}], "\[LessEqual]", " ", "0"}], 
+          "&"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"datesAndDischargeCurrentsAbsoluteMicroamps", " ", "=", " ", 
        RowBox[{
-        RowBox[{"#", "[", 
-         RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
-        RowBox[{"Abs", "[", 
-         RowBox[{"#", "[", 
-          RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], "&"}], "/@", " ", 
-     "datesAndDischargeCurrentsMicroamps"}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
- RowBox[{"DateListPlot", "[", 
-  RowBox[{
-  "datesAndDischargeCurrentsAbsoluteMicroamps", ",", "\[IndentingNewLine]", 
-   RowBox[{"AspectRatio", "\[Rule]", 
-    RowBox[{"1", "/", "3"}]}], ",", "\[IndentingNewLine]", 
-   RowBox[{"PlotTheme", "\[Rule]", "\"\<Detailed\>\""}], ",", 
-   "\[IndentingNewLine]", 
-   RowBox[{"ImageSize", "\[Rule]", "800"}], ",", "\[IndentingNewLine]", 
-   RowBox[{"Frame", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
-   RowBox[{"GridLines", "\[Rule]", 
-    RowBox[{"{", 
-     RowBox[{"Automatic", ",", "None"}], "}"}]}], ",", "\[IndentingNewLine]", 
-   
-   RowBox[{"PlotStyle", "\[Rule]", 
-    RowBox[{"{", 
-     RowBox[{"FontSize", "\[Rule]", " ", "18"}], "}"}]}], ",", 
-   "\[IndentingNewLine]", 
-   RowBox[{"FrameLabel", "\[Rule]", 
-    RowBox[{"{", 
-     RowBox[{"\"\<Time\>\"", ",", " ", "\"\<Sampled Current (\[Mu]A)\>\""}], 
-     "}"}]}], ",", "\[IndentingNewLine]", 
-   RowBox[{"FrameStyle", "\[Rule]", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+           RowBox[{"Abs", "[", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}], "]"}]}], "}"}], "&"}], "/@", " ",
+         "datesAndDischargeCurrentsMicroamps"}]}], ";", "\[IndentingNewLine]",
+       "\[IndentingNewLine]", 
+      RowBox[{"DateListPlot", "[", 
        RowBox[{
-        RowBox[{"Directive", "[", 
-         RowBox[{
-          RowBox[{"FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], 
-          ",", 
-          RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", "Gray", ",", 
-          " ", 
-          RowBox[{"Thickness", "[", "0.001", "]"}]}], "]"}], ",", " ", 
-        RowBox[{"Directive", "[", 
-         RowBox[{
-          RowBox[{"FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], 
-          ",", 
-          RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", "LightGray"}],
-          "]"}]}], "}"}], ",", " ", 
-      RowBox[{"{", 
-       RowBox[{
-        RowBox[{"Directive", "[", 
-         RowBox[{
-          RowBox[{"FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], 
-          ",", 
-          RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", "Black", ",", 
-          " ", "Thick"}], "]"}], ",", " ", 
-        RowBox[{"Directive", "[", 
-         RowBox[{
-          RowBox[{"FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], 
-          ",", 
-          RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", 
-          RowBox[{"GrayLevel", "[", "0.45", "]"}], ",", " ", 
-          RowBox[{"Thickness", "[", "0.0035", "]"}]}], "]"}]}], "}"}]}], 
-     "}"}]}]}], "]"}]}], "Input",
+       "datesAndDischargeCurrentsAbsoluteMicroamps", ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"AspectRatio", "\[Rule]", 
+         RowBox[{"1", "/", "3"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"PlotTheme", "\[Rule]", "\"\<Detailed\>\""}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"ImageSize", "\[Rule]", "800"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Frame", "\[Rule]", "True"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"GridLines", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"Automatic", ",", "None"}], "}"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"PlotStyle", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{"FontSize", "\[Rule]", " ", "18"}], "}"}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"FrameLabel", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<Time\>\"", ",", " ", "\"\<Sampled Current (\[Mu]A)\>\""}], 
+          "}"}]}], ",", "\[IndentingNewLine]", 
+        RowBox[{"FrameStyle", "\[Rule]", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Directive", "[", 
+              RowBox[{
+               RowBox[{
+               "FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], ",", 
+               
+               RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", "Gray", 
+               ",", " ", 
+               RowBox[{"Thickness", "[", "0.001", "]"}]}], "]"}], ",", " ", 
+             RowBox[{"Directive", "[", 
+              RowBox[{
+               RowBox[{
+               "FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], ",", 
+               
+               RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", 
+               "LightGray"}], "]"}]}], "}"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"Directive", "[", 
+              RowBox[{
+               RowBox[{
+               "FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], ",", 
+               
+               RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", "Black", 
+               ",", " ", "Thick"}], "]"}], ",", " ", 
+             RowBox[{"Directive", "[", 
+              RowBox[{
+               RowBox[{
+               "FontFamily", "\[Rule]", " ", "\"\<Helvetica Neue\>\""}], ",", 
+               
+               RowBox[{"FontSize", "\[Rule]", " ", "16"}], ",", " ", 
+               RowBox[{"GrayLevel", "[", "0.45", "]"}], ",", " ", 
+               RowBox[{"Thickness", "[", "0.0035", "]"}]}], "]"}]}], "}"}]}], 
+          "}"}]}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+  ";"}]}], "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ InitializationCell->True,
  CellChangeTimes->{{3.663526992666184*^9, 3.663527012696981*^9}, {
    3.66352709024442*^9, 3.663527241101337*^9}, {3.663527501427985*^9, 
    3.663527533399872*^9}, {3.663527902490831*^9, 3.6635279087117147`*^9}, {
@@ -141,7 +213,31 @@ Cell[BoxData[{
    3.66352842333326*^9}, {3.663528459490168*^9, 3.663528478208108*^9}, {
    3.663528575223402*^9, 3.663528630867667*^9}, {3.66352866695277*^9, 
    3.66352870894353*^9}, 3.663528802782076*^9, {3.6635289149052*^9, 
-   3.663529046443657*^9}}],
+   3.663529046443657*^9}, {3.6636043728505507`*^9, 3.663604474332753*^9}, {
+   3.663604510941206*^9, 3.6636045110184927`*^9}, 3.66360454842518*^9, {
+   3.663605282048636*^9, 3.663605366421356*^9}, {3.663605685017639*^9, 
+   3.663606058443336*^9}, {3.663606091843856*^9, 3.663606118888343*^9}, {
+   3.663606181056369*^9, 3.663606204861279*^9}, {3.663606441085436*^9, 
+   3.663606504791254*^9}, {3.6636067926412067`*^9, 3.6636068160414343`*^9}, {
+   3.6636760920069933`*^9, 3.6636761308555326`*^9}, {3.663676267327963*^9, 
+   3.663676280264062*^9}, {3.663676404440865*^9, 3.6636764104695387`*^9}, {
+   3.6636765127985*^9, 3.663676520179028*^9}, 3.6636766544904623`*^9, {
+   3.663676690334074*^9, 3.6636767106149673`*^9}, 3.6636768911962633`*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"analyze", "[", 
+   RowBox[{
+   "\"\<nexus6p\>\"", ",", " ", "\"\<../Logs/2016-02-03-14-15-47.txt\>\""}], 
+   "]"}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.663606121808909*^9, 3.663606158385565*^9}, {
+   3.66360621414023*^9, 3.6636062142975283`*^9}, {3.663606844816647*^9, 
+   3.66360684928249*^9}, {3.663676146661626*^9, 3.663676152431726*^9}, {
+   3.6636762608476973`*^9, 3.6636762610600452`*^9}, {3.6636763048701878`*^9, 
+   3.663676322416711*^9}, 3.6636770475818768`*^9}],
 
 Cell[BoxData[
  GraphicsBox[{{}, {{}, {}, 
@@ -630,14 +726,17 @@ gCNOOOOCKw4r6cMRJ5xxwRU3HG6gH0eccMYFV9xwWEV/5/8AravG+A==
      Scaled[0.02], 
      Scaled[0.05]}},
   Ticks->{None, Automatic}]], "Output",
- CellChangeTimes->{
-  3.6635286320207148`*^9, 3.663528668139936*^9, 3.66352871007794*^9, 
-   3.663528804216373*^9, 3.6635289243138514`*^9, 3.663528961626738*^9, {
-   3.6635290149786243`*^9, 3.663529048901339*^9}}]
+ CellChangeTimes->{{3.66360614003274*^9, 3.6636061590089417`*^9}, {
+   3.663606209018725*^9, 3.663606215087563*^9}, 3.663606253605259*^9, 
+   3.663606511092807*^9, 3.663606671918131*^9, {3.663606803790187*^9, 
+   3.663606819843483*^9}, 3.6636068503204727`*^9, {3.663676114514489*^9, 
+   3.6636761535447617`*^9}, 3.6636762838562927`*^9, 3.663676329343245*^9, 
+   3.6636765271056547`*^9, {3.663676673930872*^9, 3.663676696442473*^9}, {
+   3.6636769055056047`*^9, 3.663676914809244*^9}, 3.663677051465884*^9}]
 }, Open  ]]
 },
-WindowSize->{1448, 911},
-WindowMargins->{{4, Automatic}, {Automatic, 4}},
+WindowSize->{970, 924},
+WindowMargins->{{188, Automatic}, {Automatic, 0}},
 FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
 2015)",
 StyleDefinitions->"Default.nb"
@@ -654,8 +753,15 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 4852, 121, 318, "Input"],
-Cell[5435, 145, 22255, 490, 340, "Output"]
+Cell[580, 22, 815, 25, 188, "Text",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.}],
+Cell[1398, 49, 8192, 175, 658, "Input",
+ CellGroupingRules->{GroupTogetherGrouping, 10000.},
+ InitializationCell->True]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9627, 229, 527, 10, 40, "Input"],
+Cell[10157, 241, 22548, 493, 340, "Output"]
 }, Open  ]]
 }
 ]
