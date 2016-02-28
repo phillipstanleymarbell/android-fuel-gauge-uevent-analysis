@@ -23,7 +23,7 @@ Basic tools to grab battery event file data and to analyze collected traces of s
 
 (4) Disconnect the USB debug cable and use the phone or run your tests as usual.
 
-(5) To retrieve the log
+(5) To retrieve the log:
 
 	make retrieve
 
