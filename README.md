@@ -1,4 +1,4 @@
-# android-gas-gauge-uevent-analysis
+# android-fuel-gauge-uevent-analysis
 Basic tools to grab battery event file data and to analyze collected traces of such grabs.
 
 *This tool is just a proof-of-concept. See the list of limitations below.*
@@ -7,7 +7,7 @@ Basic tools to grab battery event file data and to analyze collected traces of s
 
 (1) Grab the repository:
 
-	git clone git@github.com:gemusehaken/android-gas-gauge-uevent-analysis.git
+	git clone git@github.com:gemusehaken/android-fuel-gauge-uevent-analysis.git
 
 (2) Running 'make install' will copy the script to the Android device currently connected to your workstation via USB.  (Be sure to first enable USB debugging on the Android device.)
 
@@ -19,7 +19,7 @@ Basic tools to grab battery event file data and to analyze collected traces of s
 
 	shell@angler:/ $ cd /data/local/tmp
 
-	shell@angler:/data/local/tmp $ gasGauge.sh > log &
+	shell@angler:/data/local/tmp $ ./fuelGauge.sh > log &
 
 (4) Disconnect the USB debug cable and use the phone or run your tests as usual.
 
@@ -34,6 +34,6 @@ This will retrieve the file '/data/local/tmp/log' from the Android device, and w
 ## Limitations
 -	It samples at 1Hz. This has the advantage that it does not induce much system activity.
 
--	Sampling at 1Hz will however not catch transients, and will be too coarse-grained to be useful in general. You can always rewrite gasGauge.sh to achieve more- or less-frequent sampling.
+-	Sampling at 1Hz will however not catch transients, and will be too coarse-grained to be useful in general. You can always rewrite fuelGauge.sh to achieve more- or less-frequent sampling.
 
 -	The analysis tools presently only look at the instantaneous current and voltage samples, and not at the battery state-of-charge.

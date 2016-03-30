@@ -1,6 +1,6 @@
 install:
-	adb push gasGauge.sh /data/local/tmp
+	/Volumes/doos/android-sdk-macosx/platform-tools/adb push fuelGauge.sh /data/local/tmp
 
 retrieve:
-	adb pull /data/local/tmp/log Logs/`date "+%Y-%m-%d-%H-%M-%S"`.txt
+	/Volumes/doos/android-sdk-macosx/platform-tools/adb pull /data/local/tmp/log Logs/`date "+%Y-%m-%d-%H-%M-%S"`.txt
 
