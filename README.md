@@ -7,7 +7,7 @@ Basic tools to grab battery event file data and to analyze collected traces of s
 
 (1) Grab the repository:
 
-	git clone git@github.com:gemusehaken/android-fuel-gauge-uevent-analysis.git
+	git clone git@github.com:phillipstanleymarbell/android-fuel-gauge-uevent-analysis.git
 
 (2) Running 'make install' will copy the script to the Android device currently connected to your workstation via USB.  (Be sure to first enable USB debugging on the Android device.)
 
